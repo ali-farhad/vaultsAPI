@@ -58,9 +58,7 @@ def isEmailDup(request, email:str):
     url = f'https://vaultspay.com/api/v1/registration/duplicate-email-check?email={email}'
     payload = {'email': f'{email}'}
     headers= {}
-
     response = requests.request("POST", url, headers=headers, data = payload)
-
     mydata = response.json()
     return {"result": mydata}
 
