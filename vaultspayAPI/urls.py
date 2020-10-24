@@ -7,6 +7,7 @@ from ninja import NinjaAPI
 from ninja import Schema
 from ninja.security import HttpBearer
 import requests
+import json
 
 api = NinjaAPI()
 version = "v1"
@@ -48,8 +49,22 @@ def checkMerchantUserRoleExistence(request):
     return {"result": mydata}
 
 
+#Endpoint # 6 & 7 not working
 
+@api.post("/registration/duplicate-email-check") 
+def isEmailDup(request, email:str):
+    # response = requests.post(f'https://vaultspay.com/api/v1/registration/duplicate-email-check?email={email}', data={'email': 'test@test.com'})
+    # req = requests.post('https://en.wikipedia.org/w/index.php', data = {'search':'Nanotechnology'})
+    url = f'https://vaultspay.com/api/v1/registration/duplicate-email-check?email={email}'
+    payload = {'email': f'{email}'}
+    headers= {}
 
+    response = requests.request("POST", url, headers=headers, data = payload)
+
+    mydata = response.json()
+    return {"result": mydata}
+
+  
 
 urlpatterns = [
     path('admin/', admin.site.urls),
