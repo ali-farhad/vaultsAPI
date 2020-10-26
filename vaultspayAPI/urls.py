@@ -16,14 +16,28 @@ secret = ""
 
 #Endpoint # 1
 @api.get("/login") 
-def login(request, email:str, password:str):
+def login(request, email:str = "", password:str = ""):
     headers={f'Content-Type':'application/json'}
     # response = requests.get(f'https://vaultspay.com/api/v1/login?email={email}&password={password}')
     response = requests.get(f'https://vaultspay.com/api/v1/login?email={email}&password={password}', headers=headers)
     mydata = response.json()
     test = mydata
-    secret = test["response"]["token"]
-    return {"result": mydata}
+    if test["response"]["status"] == 202:
+        secret = ""
+        return {"result": mydata}
+    else:
+         secret = test["response"]["token"]
+         return {"result": mydata}
+
+    # {'response': {'status': 202, 'message': 'Invalid email & credentials'}} invalid 
+    # status = 200 on success
+
+    print(test)
+    # isLogged = test["response"]["message"] #contains message is invalid
+    # if "Invalid" in isLogged:
+    #     secret = ""
+    # secret = test["response"]["token"]
+    # return {"result": mydata}
 
 #Endpoint # 2
 @api.get("/get-preference-settings") 
