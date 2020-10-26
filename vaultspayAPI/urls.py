@@ -27,7 +27,9 @@ def login(request, email:str = "", password:str = ""):
         return {"result": mydata}
     else:
          secret = test["response"]["token"]
+         t = 50
          return {"result": mydata}
+
 
 #Endpoint # 2
 @api.get("/get-preference-settings") 
@@ -80,15 +82,18 @@ def isEmailDup(request, email:str):
 #APIs garded by User Session
 
 @api.get("/get-default-wallet-balance") 
-def getDefaultWalletBalance(request, user_id:int = ""):
-    print(secret)
-    headers={f'Authorization':'Bearer {secret}'}
-    # response = requests.get(f'https://vaultspay.com/api/v1/get-preference-settings', headers=headers)
-    response = requests.get(f'https://vaultspay.com/api/v1/get-default-wallet-balance?user_id={user_id}', headers=headers)
-    print(response)
-    error = {"error": "please login first"}
-    # mydata = response.json()
-    return {"result": error}
+def getDefaultWalletBalance(request, user_id:int = "", token:str = ""):
+    headers = {'Authorization': 'Bearer ' + token}
+    response = requests.get(f'https://vaultspay.com/api/v1/get-default-wallet-balance?user_id=12', headers=headers)
+    # if(response.status_code == 500):
+    #     print("something went wrong")
+    if(response.status_code == 200):
+        mydata = response.json()
+        x = mydata["success"]["status"]
+        # print(x)
+        return {"result": mydata}
+    else:
+        return {"error": "something went wrong"}
   
 
 
