@@ -29,16 +29,6 @@ def login(request, email:str = "", password:str = ""):
          secret = test["response"]["token"]
          return {"result": mydata}
 
-    # {'response': {'status': 202, 'message': 'Invalid email & credentials'}} invalid 
-    # status = 200 on success
-
-    print(test)
-    # isLogged = test["response"]["message"] #contains message is invalid
-    # if "Invalid" in isLogged:
-    #     secret = ""
-    # secret = test["response"]["token"]
-    # return {"result": mydata}
-
 #Endpoint # 2
 @api.get("/get-preference-settings") 
 def prs(request):
@@ -49,13 +39,21 @@ def prs(request):
     return {"result": mydata}
 
 #Endpoint # 3
+@api.get("/check-user-status") 
+def checkUserStatus(request, user_id:int = ""):
+    response = requests.get(f'https://vaultspay.com/api/v1/check-user-status?user_id={user_id}')
+    mydata = response.json()
+    return {"result": mydata}
+
+
+#Endpoint # 4
 @api.get("/check-login-via") 
 def checkLoginVia(request):
     response = requests.get(f'https://vaultspay.com/api/v1/check-login-via')
     mydata = response.json()
     return {"result": mydata}
 
-#Endpoint # 4
+#Endpoint # 5
 @api.get("/check-merchant-user-role-existence") 
 def checkMerchantUserRoleExistence(request):
     response = requests.get(f'https://vaultspay.com/api/v1/check-merchant-user-role-existence')
@@ -63,8 +61,10 @@ def checkMerchantUserRoleExistence(request):
     return {"result": mydata}
 
 
-#Endpoint # 6 & 7 not working
+#Endpoint # 6 not working
 
+
+#Endpoint # 7
 @api.post("/registration/duplicate-email-check") 
 def isEmailDup(request, email:str):
     # response = requests.post(f'https://vaultspay.com/api/v1/registration/duplicate-email-check?email={email}', data={'email': 'test@test.com'})
@@ -76,7 +76,21 @@ def isEmailDup(request, email:str):
     mydata = response.json()
     return {"result": mydata}
 
+
+#APIs garded by User Session
+
+@api.get("/get-default-wallet-balance") 
+def getDefaultWalletBalance(request, user_id:int = ""):
+    print(secret)
+    headers={f'Authorization':'Bearer {secret}'}
+    # response = requests.get(f'https://vaultspay.com/api/v1/get-preference-settings', headers=headers)
+    response = requests.get(f'https://vaultspay.com/api/v1/get-default-wallet-balance?user_id={user_id}', headers=headers)
+    print(response)
+    error = {"error": "please login first"}
+    # mydata = response.json()
+    return {"result": error}
   
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
