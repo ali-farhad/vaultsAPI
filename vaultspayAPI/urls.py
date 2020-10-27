@@ -173,7 +173,109 @@ def checkProcessedBy(request, token:str = ""):
     else:
         return {"error": "something went wrong"} 
 
+#Endpoint # 14
+@api.get("/available-balance") 
+def availableBalance(request, user_id:int = "", token:str = ""):
+    headers = {'Authorization': 'Bearer ' + token}
+    response = requests.get(f'https://vaultspay.com/api/v1/available-balance?&user_id={user_id}', headers=headers)
+    if(response.status_code == 500):
+        print("something went wrong")
+    
+    elif(response.status_code == 200):
+        mydata = response.json()
+     
+        return {"result": mydata}
+    else:
+        return {"error": "something went wrong"} 
 
+#Endpoint # 15
+@api.get("/activityall") 
+def activityall(request, user_id:int = "", token:str = ""):
+    headers = {'Authorization': 'Bearer ' + token}
+    response = requests.get(f'https://vaultspay.com/api/v1/activityall?&user_id={user_id}&type=allTransactions', headers=headers)
+    if(response.status_code == 500):
+        print("something went wrong")
+    
+    elif(response.status_code == 200):
+        mydata = response.json()
+     
+        return {"result": mydata}
+    else:
+        return {"error": "something went wrong"} 
+
+#Endpoint # 16
+@api.get("/transaction-details") 
+def transDetails(request, user_id:int = "", tr_id:int = "", token:str = ""):
+    headers = {'Authorization': 'Bearer ' + token}
+    response = requests.get(f'https://vaultspay.com/api/v1/transaction-details?&user_id={user_id}&tr_id={tr_id}', headers=headers)
+    if(response.status_code == 500):
+        print("something went wrong")
+    
+    elif(response.status_code == 200):
+        mydata = response.json()
+     
+        return {"result": mydata}
+    else:
+        return {"error": "something went wrong"} 
+
+#Endpoint # 17
+@api.get("/get-deposit-currency-list") 
+def getDepositCurrList(request, user_id:int = "",token:str = ""):
+    headers = {'Authorization': 'Bearer ' + token}
+    response = requests.get(f'https://vaultspay.com/api/v1/get-deposit-currency-list?&user_id={user_id}', headers=headers)
+    if(response.status_code == 500):
+        print("something went wrong")
+    
+    elif(response.status_code == 200):
+        mydata = response.json()
+     
+        return {"result": mydata}
+    else:
+        return {"error": "something went wrong"} 
+
+
+#Endpoint # 18
+@api.get("/get-deposit-bank-list") 
+def getDepositBankList(request, user_id:int = "",token:str = ""):
+    headers = {'Authorization': 'Bearer ' + token}
+    response = requests.get(f'https://vaultspay.com/api/v1/get-deposit-bank-list?&user_id={user_id}', headers=headers)
+    if(response.status_code == 500):
+        print("something went wrong")
+    
+    elif(response.status_code == 200):
+        mydata = response.json()
+     
+        return {"result": mydata}
+    else:
+        return {"error": "something went wrong"} 
+
+#Endpoint # 19
+@api.get("/get-deposit-details-with-amount-limit-check") 
+def getDepositDetailsWithAmountLimitCheck(request, user_id:int = "", amount:int = "", currency_id:int = "", paymentMethodId:int = "", token:str = ""):
+    headers = {'Authorization': 'Bearer ' + token}
+    response = requests.get(f'https://vaultspay.com/api/v1/get-deposit-details-with-amount-limit-check?&user_id={user_id}&amount={amount}&currency_id={currency_id}&paymentMethodId={paymentMethodId}', headers=headers)
+    if(response.status_code == 500):
+        print("something went wrong")
+    
+    elif(response.status_code == 200):
+        mydata = response.json()
+     
+        return {"result": mydata}
+    else:
+        return {"error": "something went wrong"} 
+
+#Endpoint # 20
+@api.post("/deposit/get-bank-detail") 
+def getBankDetail(request, bank:int = "",token:str = ""):
+    headers = {'Authorization': 'Bearer ' + token}
+    # response = requests.get(f'https://vaultspay.com/api/v1/deposit/get-bank-detail?&bank={bank}', headers=headers)
+    
+    url = f'https://vaultspay.com/api/v1/deposit/get-bank-detail?&bank={bank}'
+    payload = {'bank': f'{bank}'}
+    headers = {'Authorization': 'Bearer ' + token}
+    response = requests.request("POST", url, headers=headers, data = payload)
+    mydata = response.json()
+    return {"result": mydata}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
