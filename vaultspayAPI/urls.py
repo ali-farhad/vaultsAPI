@@ -14,21 +14,51 @@ version = "v1"
 
 secret = ""
 
+# #Endpoint # 1
+# @api.get("/login") 
+# def login(request, email:str = "", password:str = ""):
+#     headers={f'Content-Type':'application/json'}
+#     response = requests.get(f'https://vaultspay.com/api/v1/login?email={email}&password={password}', headers=headers)
+#     mydata = response.json()
+#     test = mydata
+#     if test["response"]["status"] == 202:
+#         secret = ""
+#         return {"result": mydata}
+#     else:
+#          secret = test["response"]["token"]
+#          t = 50
+#          return {"result": mydata}
+
+
 #Endpoint # 1
-@api.get("/login") 
-def login(request, email:str = "", password:str = ""):
+@api.post("/login") 
+def login(request):
     headers={f'Content-Type':'application/json'}
-    # response = requests.get(f'https://vaultspay.com/api/v1/login?email={email}&password={password}')
-    response = requests.get(f'https://vaultspay.com/api/v1/login?email={email}&password={password}', headers=headers)
+    payload = {'email': 'user@test.com', 'password': 'Admin@123'}
+    url = f'https://vaultspay.com/api/v1/login?'
+    headers= {}
+    response = requests.request("POST", url, headers=headers, data = payload)
     mydata = response.json()
-    test = mydata
-    if test["response"]["status"] == 202:
-        secret = ""
-        return {"result": mydata}
-    else:
-         secret = test["response"]["token"]
-         t = 50
-         return {"result": mydata}
+    return {"result": mydata}
+
+    # response = requests.get(f'https://vaultspay.com/api/v1/login?email={email}&password={password}', headers=headers)
+    # mydata = response.json()
+    # test = mydata
+    # if test["response"]["status"] == 202:
+    #     secret = ""
+    #     return {"result": mydata}
+    # else:
+    #      secret = test["response"]["token"]
+    #      t = 50
+    #      return {"result": mydata}
+
+
+#  url = f'https://vaultspay.com/api/v1/registration/duplicate-email-check?email={email}'
+#     payload = {'email': f'{email}'}
+#     headers= {}
+#     response = requests.request("POST", url, headers=headers, data = payload)
+#     mydata = response.json()
+#     return {"result": mydata}
 
 
 #Endpoint # 2
