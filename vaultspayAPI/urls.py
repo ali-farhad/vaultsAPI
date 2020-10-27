@@ -18,7 +18,6 @@ secret = ""
 @api.get("/login") 
 def login(request, email:str = "", password:str = ""):
     headers={f'Content-Type':'application/json'}
-    # response = requests.get(f'https://vaultspay.com/api/v1/login?email={email}&password={password}')
     response = requests.get(f'https://vaultspay.com/api/v1/login?email={email}&password={password}', headers=headers)
     mydata = response.json()
     test = mydata
@@ -29,6 +28,15 @@ def login(request, email:str = "", password:str = ""):
          secret = test["response"]["token"]
          t = 50
          return {"result": mydata}
+
+
+
+
+
+
+
+
+   
 
 
 #Endpoint # 2
