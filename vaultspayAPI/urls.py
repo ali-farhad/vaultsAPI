@@ -1,6 +1,7 @@
 """vaultspayAPI URL Configuration
 """
-
+from dotenv import load_dotenv
+import os
 from django.contrib import admin
 from django.urls import path
 from ninja import NinjaAPI
@@ -9,10 +10,12 @@ from ninja.security import HttpBearer
 import requests
 import json
 
+load_dotenv()
 api = NinjaAPI()
 version = "v1"
 
-secret = ""
+secret = str(os.getenv('secret'))
+
 
 # #Endpoint # 1
 # @api.get("/login") 
@@ -41,54 +44,48 @@ def login(request):
     mydata = response.json()
     return {"result": mydata}
 
-    # response = requests.get(f'https://vaultspay.com/api/v1/login?email={email}&password={password}', headers=headers)
-    # mydata = response.json()
-    # test = mydata
-    # if test["response"]["status"] == 202:
-    #     secret = ""
-    #     return {"result": mydata}
-    # else:
-    #      secret = test["response"]["token"]
-    #      t = 50
-    #      return {"result": mydata}
 
+# Endpoint # 2
 
-#  url = f'https://vaultspay.com/api/v1/registration/duplicate-email-check?email={email}'
-#     payload = {'email': f'{email}'}
-#     headers= {}
-#     response = requests.request("POST", url, headers=headers, data = payload)
-#     mydata = response.json()
-#     return {"result": mydata}
-
-
-#Endpoint # 2
-@api.get("/get-preference-settings") 
-def prs(request):
-    headers={f'Content-Type':'application/json', 'Authorization':'Bearer {secret}'}
-    response = requests.get(f'https://vaultspay.com/api/v1/get-preference-settings', headers=headers)
+@api.post("/get-preference-settings") 
+def getPreferenceSetting(request):
+    # headers={f'Content-Type':'application/json', 'Authorization':'Bearer {secret}'}
+    headers={f'Content-Type':'application/json'}
+    payload = {'Authorization': f'Bearer {secret}'}
+    url = f'https://vaultspay.com/api/v1/get-preference-settings?'
+    response = requests.request("POST", url, headers=headers, data = payload)
     mydata = response.json()
     # print(secret)
     return {"result": mydata}
 
 #Endpoint # 3
-@api.get("/check-user-status") 
-def checkUserStatus(request, user_id:int = ""):
-    response = requests.get(f'https://vaultspay.com/api/v1/check-user-status?user_id={user_id}')
+@api.post("/check-user-status") 
+def checkUserStatus(request):
+    headers={}
+    payload = {'user_id': '12'}
+    url = f'https://vaultspay.com/api/v1/check-user-status?'
+    response = requests.request("POST", url, headers=headers, data = payload)
     mydata = response.json()
     return {"result": mydata}
-
 
 #Endpoint # 4
-@api.get("/check-login-via") 
+@api.post("/check-login-via") 
 def checkLoginVia(request):
-    response = requests.get(f'https://vaultspay.com/api/v1/check-login-via')
+    headers={}
+    payload = {}
+    url = f'https://vaultspay.com/api/v1/check-login-via'
+    response = requests.request("POST", url, headers=headers, data = payload)
     mydata = response.json()
     return {"result": mydata}
 
+
 #Endpoint # 5
-@api.get("/check-merchant-user-role-existence") 
+@api.post("/check-merchant-user-role-existence") 
 def checkMerchantUserRoleExistence(request):
-    response = requests.get(f'https://vaultspay.com/api/v1/check-merchant-user-role-existence')
+    headers={}
+    payload = {}
+    url = f'https://vaultspay.com/api/v1/check-merchant-user-role-existence'
+    response = requests.request("POST", url, headers=headers, data = payload)
     mydata = response.json()
     return {"result": mydata}
 
@@ -98,55 +95,75 @@ def checkMerchantUserRoleExistence(request):
 
 #Endpoint # 7
 @api.post("/registration/duplicate-email-check") 
-def isEmailDup(request, email:str):
-
-    url = f'https://vaultspay.com/api/v1/registration/duplicate-email-check?email={email}'
-    payload = {'email': f'{email}'}
-    headers= {}
+def isEmailDup(request):
+    headers = {}
+    payload = {'email': 'user@test.com'}
+    url = f'https://vaultspay.com/api/v1/registration/duplicate-email-check?'
     response = requests.request("POST", url, headers=headers, data = payload)
     mydata = response.json()
     return {"result": mydata}
+
 
 #Endpoint # 8
 @api.post("/registration/duplicate-phone-number-check") 
-def isPhoneDup(request, phone:str):
-    url = f'https://vaultspay.com/api/v1/registration/duplicate-phone-number-check?phone={phone}'
-    payload = {'phone': f'{phone}'}
+def isPhoneDup(request):
     headers= {}
-    response = requests.request("POST", url, headers=headers, data = payload)
+    payload = {'phone': '9191919191'}
+    url = f'https://vaultspay.com/api/v1/registration/duplicate-phone-number-check?'
+    response = requests.request("POST", url, headers=headers, data=payload)
     mydata = response.json()
     return {"result": mydata}
+
 
 
 #APIs garded by User Session
 
 #Endpoint # 8
-@api.get("/get-default-wallet-balance") 
-def getDefaultWalletBalance(request, user_id:int = "", token:str = ""):
-    headers = {'Authorization': 'Bearer ' + token}
-    response = requests.get(f'https://vaultspay.com/api/v1/get-default-wallet-balance?user_id=12', headers=headers)
-    if(response.status_code == 200):
-        mydata = response.json()
-        x = mydata["success"]["status"]
-        # print(x)
-        return {"result": mydata}
-    else:
-        return {"error": "something went wrong"}
+@api.post("/get-default-wallet-balance") 
+def getDefaultWalletBalance(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'12'}
+    url = f'https://vaultspay.com/api/v1/get-default-wallet-balance?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
+
+
+    # if(response.status_code == 200):
+    #     mydata = response.json()
+    #     x = mydata["success"]["status"]
+    #     # print(x)
+    #     return {"result": mydata}
+    # else:
+    #     return {"error": "something went wrong"}
+
+# #Endpoint # 8
+# @api.get("/get-default-wallet-balance") 
+# def getDefaultWalletBalance(request, user_id:int = "", token:str = ""):
+#     headers = {'Authorization': 'Bearer ' + token}
+#     response = requests.get(f'https://vaultspay.com/api/v1/get-default-wallet-balance?user_id=12', headers=headers)
+#     if(response.status_code == 200):
+#         mydata = response.json()
+#         x = mydata["success"]["status"]
+#         # print(x)
+#         return {"result": mydata}
+#     else:
+#         return {"error": "something went wrong"}
 
 #Endpoint # 9
-@api.get("/get-default-wallet-balance") 
-def getDefaultWalletBalance(request, user_id:int = "", token:str = ""):
-    headers = {'Authorization': 'Bearer ' + token}
-    response = requests.get(f'https://vaultspay.com/api/v1/get-default-wallet-balance?user_id={user_id}', headers=headers)
-    if(response.status_code == 500):
-        print("something went wrong")
+# @api.get("/get-default-wallet-balance") 
+# def getDefaultWalletBalance(request, user_id:int = "", token:str = ""):
+#     headers = {'Authorization': 'Bearer ' + token}
+#     response = requests.get(f'https://vaultspay.com/api/v1/get-default-wallet-balance?user_id={user_id}', headers=headers)
+#     if(response.status_code == 500):
+#         print("something went wrong")
 
-    elif(response.status_code == 200):
-        mydata = response.json()
+#     elif(response.status_code == 200):
+#         mydata = response.json()
     
-        return {"result": mydata}
-    else:
-        return {"error": "something went wrong"}
+#         return {"result": mydata}
+#     else:
+#         return {"error": "something went wrong"}
   
 #Endpoint # 10
 @api.get("/get-user-profile") 
