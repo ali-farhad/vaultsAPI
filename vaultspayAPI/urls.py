@@ -129,87 +129,44 @@ def getDefaultWalletBalance(request):
     return {"result": mydata}
 
 
-    # if(response.status_code == 200):
-    #     mydata = response.json()
-    #     x = mydata["success"]["status"]
-    #     # print(x)
-    #     return {"result": mydata}
-    # else:
-    #     return {"error": "something went wrong"}
-
-# #Endpoint # 8
-# @api.get("/get-default-wallet-balance") 
-# def getDefaultWalletBalance(request, user_id:int = "", token:str = ""):
-#     headers = {'Authorization': 'Bearer ' + token}
-#     response = requests.get(f'https://vaultspay.com/api/v1/get-default-wallet-balance?user_id=12', headers=headers)
-#     if(response.status_code == 200):
-#         mydata = response.json()
-#         x = mydata["success"]["status"]
-#         # print(x)
-#         return {"result": mydata}
-#     else:
-#         return {"error": "something went wrong"}
-
-#Endpoint # 9
-# @api.get("/get-default-wallet-balance") 
-# def getDefaultWalletBalance(request, user_id:int = "", token:str = ""):
-#     headers = {'Authorization': 'Bearer ' + token}
-#     response = requests.get(f'https://vaultspay.com/api/v1/get-default-wallet-balance?user_id={user_id}', headers=headers)
-#     if(response.status_code == 500):
-#         print("something went wrong")
-
-#     elif(response.status_code == 200):
-#         mydata = response.json()
-    
-#         return {"result": mydata}
-#     else:
-#         return {"error": "something went wrong"}
-  
 #Endpoint # 10
-@api.get("/get-user-profile") 
-def getUserProfile(request, user_id:int = "", token:str = ""):
-    headers = {'Authorization': 'Bearer ' + token}
-    response = requests.get(f'https://vaultspay.com/api/v1/get-user-profile?user_id={user_id}', headers=headers)
-    if(response.status_code == 500):
-        print("something went wrong")
-    
-    elif(response.status_code == 200):
-        mydata = response.json()
-     
-        return {"result": mydata}
-    else:
-        return {"error": "something went wrong"}
+@api.post("/get-user-profile") 
+def getUserProfile(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'13'}
+    url = f'https://vaultspay.com/api/v1/get-user-profile?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
 
 #Endpoint # 11
-@api.get("/get-user-specific-details") 
-def getUserSpecificDetails(request, email:str = "", token:str = ""):
-    headers = {'Authorization': 'Bearer ' + token}
-    response = requests.get(f'https://vaultspay.com/api/v1/get-user-specific-details?email={email}', headers=headers)
-    if(response.status_code == 500):
-        print("something went wrong")
-    
-    elif(response.status_code == 200):
-        mydata = response.json()
-     
-        return {"result": mydata}
-    else:
-        return {"error": "something went wrong"}
+@api.post("/get-user-specific-details") 
+def getUserSpecificDetails(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'email':'user@test.com'}
+    url = f'https://vaultspay.com/api/v1/get-user-specific-details?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
+   
 
-#Endpoint # 12 NOT WORKING 
+#Endpoint # 12
 @api.post("/profile/duplicate-email-check") 
-def profileDuplicateEmailCheck(request, email:str = "", token:str = ""):
-    url = f'https://vaultspay.com/api/v1/profile/duplicate-email-check?email={email}'
-    payload = {'email': f'{email}'}
-    headers = {'Authorization': 'Bearer ' + token}
-    response = requests.request("POST", url, headers=headers, data = payload)
+def profileDuplicateEmailCheck(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'email':'user@test.com'}
+    url = f'https://vaultspay.com/api/v1/profile/duplicate-email-check?'
+    response = requests.request("POST", url, headers=headers, data=payload)
     mydata = response.json()
     return {"result": mydata}
 
 #Endpoint # 13
-@api.get("/check-processed-by") 
-def checkProcessedBy(request, token:str = ""):
-    headers = {'Authorization': 'Bearer ' + token}
-    response = requests.get(f'https://vaultspay.com/api/v1/check-processed-by', headers=headers)
+@api.post("/check-processed-by") 
+def checkProcessedBy(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {}
+    url = f'https://vaultspay.com/api/v1/check-processed-by?'
+    response = requests.request("POST", url, headers=headers, data=payload)
     if(response.status_code == 500):
         print("something went wrong")
     
@@ -221,10 +178,12 @@ def checkProcessedBy(request, token:str = ""):
         return {"error": "something went wrong"} 
 
 #Endpoint # 14
-@api.get("/available-balance") 
-def availableBalance(request, user_id:int = "", token:str = ""):
-    headers = {'Authorization': 'Bearer ' + token}
-    response = requests.get(f'https://vaultspay.com/api/v1/available-balance?&user_id={user_id}', headers=headers)
+@api.post("/available-balance") 
+def availableBalance(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'13'}
+    url = f'https://vaultspay.com/api/v1/available-balance?'
+    response = requests.request("POST", url, headers=headers, data=payload)
     if(response.status_code == 500):
         print("something went wrong")
     
@@ -236,93 +195,199 @@ def availableBalance(request, user_id:int = "", token:str = ""):
         return {"error": "something went wrong"} 
 
 #Endpoint # 15
-@api.get("/activityall") 
-def activityall(request, user_id:int = "", token:str = ""):
-    headers = {'Authorization': 'Bearer ' + token}
-    response = requests.get(f'https://vaultspay.com/api/v1/activityall?&user_id={user_id}&type=allTransactions', headers=headers)
-    if(response.status_code == 500):
-        print("something went wrong")
-    
-    elif(response.status_code == 200):
-        mydata = response.json()
-     
-        return {"result": mydata}
-    else:
-        return {"error": "something went wrong"} 
+@api.post("/activityall") 
+def activityall(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'12', 'type':'allTransactions'}
+    url = f'https://vaultspay.com/api/v1/activityall?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
+
 
 #Endpoint # 16
-@api.get("/transaction-details") 
-def transDetails(request, user_id:int = "", tr_id:int = "", token:str = ""):
-    headers = {'Authorization': 'Bearer ' + token}
-    response = requests.get(f'https://vaultspay.com/api/v1/transaction-details?&user_id={user_id}&tr_id={tr_id}', headers=headers)
-    if(response.status_code == 500):
-        print("something went wrong")
-    
-    elif(response.status_code == 200):
-        mydata = response.json()
-     
-        return {"result": mydata}
-    else:
-        return {"error": "something went wrong"} 
+@api.post("/transaction-details") 
+def transDetails(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'13', 'tr_id':'12'}
+    url = f'https://vaultspay.com/api/v1/transaction-details?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
+
 
 #Endpoint # 17
-@api.get("/get-deposit-currency-list") 
-def getDepositCurrList(request, user_id:int = "",token:str = ""):
-    headers = {'Authorization': 'Bearer ' + token}
-    response = requests.get(f'https://vaultspay.com/api/v1/get-deposit-currency-list?&user_id={user_id}', headers=headers)
-    if(response.status_code == 500):
-        print("something went wrong")
-    
-    elif(response.status_code == 200):
-        mydata = response.json()
-     
-        return {"result": mydata}
-    else:
-        return {"error": "something went wrong"} 
+@api.post("/get-deposit-currency-list") 
+def getDepositCurrList(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'13'}
+    url = f'https://vaultspay.com/api/v1/get-deposit-currency-list?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
+   
 
 
 #Endpoint # 18
-@api.get("/get-deposit-bank-list") 
-def getDepositBankList(request, user_id:int = "",token:str = ""):
-    headers = {'Authorization': 'Bearer ' + token}
-    response = requests.get(f'https://vaultspay.com/api/v1/get-deposit-bank-list?&user_id={user_id}', headers=headers)
-    if(response.status_code == 500):
-        print("something went wrong")
+@api.post("/get-deposit-bank-list") 
+def getDepositBankList(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'13'}
+    url = f'https://vaultspay.com/api/v1/get-deposit-bank-list?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
     
-    elif(response.status_code == 200):
-        mydata = response.json()
-     
-        return {"result": mydata}
-    else:
-        return {"error": "something went wrong"} 
 
 #Endpoint # 19
-@api.get("/get-deposit-details-with-amount-limit-check") 
-def getDepositDetailsWithAmountLimitCheck(request, user_id:int = "", amount:int = "", currency_id:int = "", paymentMethodId:int = "", token:str = ""):
-    headers = {'Authorization': 'Bearer ' + token}
-    response = requests.get(f'https://vaultspay.com/api/v1/get-deposit-details-with-amount-limit-check?&user_id={user_id}&amount={amount}&currency_id={currency_id}&paymentMethodId={paymentMethodId}', headers=headers)
-    if(response.status_code == 500):
-        print("something went wrong")
-    
-    elif(response.status_code == 200):
-        mydata = response.json()
-     
-        return {"result": mydata}
-    else:
-        return {"error": "something went wrong"} 
+@api.post("/get-deposit-details-with-amount-limit-check") 
+def getDepositDetailsWithAmountLimitCheck(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'12', 'amount':'5', 'currency_id':'1', 'paymentMethodId': '3'}
+    url = f'https://vaultspay.com/api/v1/get-deposit-details-with-amount-limit-check?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
 
 #Endpoint # 20
 @api.post("/deposit/get-bank-detail") 
-def getBankDetail(request, bank:int = "",token:str = ""):
-    headers = {'Authorization': 'Bearer ' + token}
-    # response = requests.get(f'https://vaultspay.com/api/v1/deposit/get-bank-detail?&bank={bank}', headers=headers)
-    
-    url = f'https://vaultspay.com/api/v1/deposit/get-bank-detail?&bank={bank}'
-    payload = {'bank': f'{bank}'}
-    headers = {'Authorization': 'Bearer ' + token}
-    response = requests.request("POST", url, headers=headers, data = payload)
+def getBankDetail(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'bank':'1'}
+    url = f'https://vaultspay.com/api/v1/deposit/get-bank-detail?'
+    response = requests.request("POST", url, headers=headers, data=payload)
     mydata = response.json()
     return {"result": mydata}
+
+#Endpoint # 21
+@api.post("/deposit/bank-payment-store") 
+def depositBankPaymentStore(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'12', 'amount':'5', 'currency_id':'1', 'deposit_payment_id':'6', 'deposit_payment_name':'Bank', 'bank_id':'1', 'totalFees':'2'}
+    url = f'https://vaultspay.com/api/v1/deposit/bank-payment-store?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
+
+#Endpoint # 22
+@api.post("deposit/get-stripe-info") 
+def getStripeInfo(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'currency_id':'1', 'method_id':'10'}
+    url = f'https://vaultspay.com/api/v1/deposit/get-stripe-info?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
+
+#Endpoint # 23
+@api.post("deposit/get-paypal-info") 
+def getPaypalInfo(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'currency_id':'1', 'method_id':'10'}
+    url = f'https://vaultspay.com/api/v1/deposit/get-paypal-info?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
+
+#Endpoint # 24
+@api.post("/check-payout-settings") 
+def checkPayoutSettings(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'12'}
+    url = f'https://vaultspay.com/api/v1/check-payout-settings?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
+
+#Endpoint # 25
+@api.post("/get-withdraw-payment-method") 
+def getWithdrawPaymentMethod(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'12'}
+    url = f'https://vaultspay.com/api/v1/get-withdraw-payment-method?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
+
+
+#Endpoint # 26
+@api.post("/get-withdraw-currencies-based-on-payment-method") 
+def getWithdrawCurrenciesBasedOnPaymentMethod(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'12', 'paymentMethodId':'1'}
+    url = f'https://vaultspay.com/api/v1/get-withdraw-currencies-based-on-payment-method?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
+
+
+#Endpoint # 27 [possible error in documentation]
+@api.post("/get-withdraw-currencies-based-on-payment-method") 
+def getWithdrawCurrenciesBasedOnPaymentMethod(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'12', 'amount':'5', 'currency_id':'1', 'payoutSetid':'1', 'paymentMethodId':'3'}
+    url = f'https://vaultspay.com/api/v1/get-withdraw-currencies-based-on-payment-method?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
+
+#Endpoint # 28
+@api.post("/withdraw-money-pay") 
+def withdrawMoneyPay(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'12', 'currency_id':'1', 'amount':'5', 'payout_setting_id':'1', 'totalFees':'2'}
+    url = f'https://vaultspay.com/api/v1/withdraw-money-pay?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
+
+#Endpoint # 29
+@api.post("/send-money-email-check") 
+def sendMoneyEmailCheck(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'12', 'receiverEmail': 'user@test.com'}
+    # send to Own Email
+    # payload = {'user_id':'12', 'receiverEmail': 'merchant@test.com'}
+    url = f'https://vaultspay.com/api/v1/send-money-email-check?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
+
+
+#Endpoint # 30
+@api.post("/send-money-phone-check") 
+def sendMoneyPhoneCheck(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'12', 'receiverPhone': '+97152345678'}
+    url = f'https://vaultspay.com/api/v1/send-money-phone-check?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
+
+
+#Endpoint # 31
+@api.post("/get-send-money-currencies") 
+def sendMoneyPhoneCheck(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'12'}
+    url = f'https://vaultspay.com/api/v1/get-send-money-currencies?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
+
+
+#Endpoint # 32
+@api.post("/check-send-money-amount-limit") 
+def checkSendMoneyAmountLimit(request):
+    headers = {'Authorization': f'Bearer {secret}'}
+    payload = {'user_id':'12', 'sendCurrency':'1', 'amount':'5'}
+    url = f'https://vaultspay.com/api/v1/check-send-money-amount-limit?'
+    response = requests.request("POST", url, headers=headers, data=payload)
+    mydata = response.json()
+    return {"result": mydata}
+
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
